@@ -76,7 +76,9 @@ public class BinaryTreeNode<T> implements Comparable{
 
 	@Override
 	public int compareTo(Object o) {
-
+		if( o == null){
+			throw new NullPointerException("object is null");
+		}
 		return ((Integer)root.data - (Integer) o);
 	}
 }

@@ -1,5 +1,10 @@
 package com.dataStructure.tree;
 
+import com.dataStructure.queue.Queue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class BinarySearchTree<T extends Comparable> {
 
     BinaryTreeNode<T> root;
@@ -40,9 +45,15 @@ public class BinarySearchTree<T extends Comparable> {
     }
 
     public int size() {
+        return size(root);
+    }
 
-        int size = BinaryTreeUtil.preOrderVisit(root).size();
-        return size;
+
+    private int size(BinaryTreeNode<T> t) {
+        if (t == null)
+            return 0;
+        else
+            return 1 + size(t.left) + size(t.right);
     }
 
 
@@ -60,12 +71,12 @@ public class BinarySearchTree<T extends Comparable> {
         return height(root);
     }
 
-    private int height(BinaryTreeNode<T> t){
+    private int height(BinaryTreeNode<T> t) {
 
-        if(t == null)
+        if (t == null)
             return 0;
         else
-            return 1 + Math.max(height(t.getLeft()),height(t.getRight()));
+            return 1 + Math.max(height(t.getLeft()), height(t.getRight()));
     }
 
     public boolean contains(T data) {
@@ -98,42 +109,43 @@ public class BinarySearchTree<T extends Comparable> {
 
     public void insert(T data) {
 
-        insert(data,root);
+        insert(data, root);
     }
-    private BinaryTreeNode<T> insert(T data,BinaryTreeNode<T> t){
 
-        if(t == null){
+    private BinaryTreeNode<T> insert(T data, BinaryTreeNode<T> t) {
+
+        if (t == null) {
             return new BinaryTreeNode<T>(data);
         }
 
         int compareResult = data.compareTo(t.getData());
 
-        if(compareResult < 0){
-            t.setLeft(insert(data,t.getLeft()));
-        }else if(compareResult > 0){
-            t.setLeft(insert(data,t.getRight()));
-        }else {
+        if (compareResult < 0) {
+            t.setLeft(insert(data, t.getLeft()));
+        } else if (compareResult > 0) {
+            t.setLeft(insert(data, t.getRight()));
+        } else {
             //do nothing!
         }
-        return t ;
+        return t;
     }
 
     public void remove(T data) {
-        remove(data,root);
+        remove(data, root);
 
     }
 
     private BinaryTreeNode<T> remove(T data, BinaryTreeNode<T> t) {
-        if(t == null ){
+        if (t == null) {
             return t;
         }
         int compareResult = data.compareTo(t.getData());
 
-        if(compareResult < 0){
-            t.left = remove(data,t.getLeft());
-        }else if(compareResult > 0){
-            t.right = remove(data,t.getRight());
-        }else {
+        if (compareResult < 0) {
+            t.left = remove(data, t.getLeft());
+        } else if (compareResult > 0) {
+            t.right = remove(data, t.getRight());
+        } else {
             if (t.getLeft() != null && t.getRight() != null) {
                 t.data = findMin(t.getRight()).getData();
 
@@ -145,6 +157,90 @@ public class BinarySearchTree<T extends Comparable> {
         }
         return t;
     }
+
+    public List<T> levelVisit() {
+        Queue<BinaryTreeNode> queue = new Queue<>();
+        List<T> result = new ArrayList<>();
+
+        queue.enQueue(root);
+
+        BinaryTreeNode currNode = null;
+
+        while (!queue.isEmpty()) {
+            currNode = queue.deQueue();
+            result.add((T) currNode.data);
+            if (currNode.left != null) {
+                queue.enQueue(currNode.left);
+            }
+            if (currNode.right != null) {
+                queue.enQueue(currNode.right);
+            }
+
+        }
+
+        return result;
+    }
+
+    public boolean isValid() {
+        return isValid(root);
+    }
+
+    private boolean isValid(BinaryTreeNode<T> t) {
+
+
+
+        if(t == null){
+            throw new NullPointerException();
+        }
+
+        Queue<BinaryTreeNode> queue = new Queue<>();
+        queue.enQueue(t);
+        BinaryTreeNode curr = null ;
+        while(!queue.isEmpty()){
+            curr = queue.deQueue();
+            if(curr.left != null){
+                if(curr.compareTo(curr.left) > 0){
+                    queue.enQueue(curr.left);
+                }else{
+                    return false;
+                }
+            }
+            if(curr.right != null){
+                if(t.compareTo(curr.right) > 0){
+                    queue.enQueue(curr.right);
+                }else{
+                    return false;
+                }
+            }
+
+
+        }
+
+        return true;
+
+
+    }
+
+    public T getLowestCommonAncestor(T n1, T n2) {
+
+        return null;
+
+    }
+
+    public List<T> getNodesBetween(T n1, T n2) {
+        List<T> list = new ArrayList<>();
+        getNodesBetween(root,n1,n2,list);
+        return list;
+    }
+
+    private void getNodesBetween(BinaryTreeNode<T> root, T n1, T n2, List<T> list) {
+
+
+
+
+
+    }
+
 
 }
 

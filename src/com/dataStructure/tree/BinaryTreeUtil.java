@@ -121,12 +121,6 @@ public class BinaryTreeUtil {
 
         }
 
-
-
-
-
-
-
         return result;
     }
 
