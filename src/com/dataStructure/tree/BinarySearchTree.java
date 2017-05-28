@@ -124,8 +124,6 @@ public class BinarySearchTree<T extends Comparable> {
             t.setLeft(insert(data, t.getLeft()));
         } else if (compareResult > 0) {
             t.setLeft(insert(data, t.getRight()));
-        } else {
-            //do nothing!
         }
         return t;
     }
@@ -222,24 +220,48 @@ public class BinarySearchTree<T extends Comparable> {
     }
 
     public T getLowestCommonAncestor(T n1, T n2) {
+        return getLowestCommonAncestor(root,n1,n2);
+    }
 
-        return null;
+    private T getLowestCommonAncestor(BinaryTreeNode<T> root, T n1, T n2) {
 
+        if(root == null)
+            throw new NullPointerException();
+
+        int min = n1.compareTo(root.data);
+        int max = n2.compareTo(root.data);
+
+        T result = root.data;
+        if(min <= 0 && max >= 0){
+            return result;
+        }
+
+        if(min  > 0 && max > 0 ){
+            result = getLowestCommonAncestor(root.right,n1,n2);
+        }
+
+        if(min < 0 && max < 0){
+            result = getLowestCommonAncestor(root.left,n1,n2);
+        }
+
+        return result;
     }
 
     public List<T> getNodesBetween(T n1, T n2) {
-        List<T> list = new ArrayList<>();
-        getNodesBetween(root,n1,n2,list);
-        return list;
+        List<T> result = new ArrayList<>();
+        List<T> list = levelVisit();
+
+        for (T t: list) {
+            if(t.compareTo(n1) > 0 && t.compareTo(n2) <0 ){
+                result.add(t);
+            }
+        }
+
+        return result;
+
     }
 
-    private void getNodesBetween(BinaryTreeNode<T> root, T n1, T n2, List<T> list) {
 
-
-
-
-
-    }
 
 
 }
